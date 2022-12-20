@@ -44,11 +44,14 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.error').should('not.be.visible')
     });
 
-    it('Phone field only accepts numbers', () => {
+    Cypress._.times(3, function() {
+      it.only('Phone field only accepts numbers', () => {
         cy.get('input[id="phone"]')
         .type('abcde')
         .should('have.value', '');
-    });
+      });
+    })
+    
 
     it('Displays error message when phone becomes mandatory but not filled in before form submission', () => {
         cy.clock()
@@ -105,7 +108,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.get('.error').should('not.be.visible')
     });
 
-    it.only('Submit the form successfully using a custom command', () => {
+    it('Submit the form successfully using a custom command', () => {
         cy.clock()
 
         cy.fillMandatoryFieldsAndSubmit()
