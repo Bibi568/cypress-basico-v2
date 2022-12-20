@@ -1,5 +1,7 @@
 /// <reference types="Cypress" />///
 describe('Central de Atendimento ao Cliente TAT', function() {
+    const THREE_SECONDS_IN_MS = 3000
+
     beforeEach(() => {
         cy.visit('./src/index.html')
     });
@@ -8,7 +10,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
     });
 
-    it.only('Fill in the required fields and send the form', () => {
+    it('Fill in the required fields and send the form', () => {
         cy.clock()
         
         cy.get('input[name="firstName"]').type('Bianca', {delay: 25})
@@ -20,12 +22,14 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         // cy.get('button[type="submit"]').click()
         cy.get('.success').should('be.visible')
 
-        cy.tick(3000)
+        cy.tick(THREE_SECONDS_IN_MS)
 
         cy.get('.success').should('not.be.visible')
     });
 
     it('Displays error message when submitting the form with an email with invalid formatting', () => {
+        cy.clock()
+
         cy.get('input[name="firstName"]').type('Bianca', {delay: 25})
         cy.get('input[name="lastName"]').type('Gomes Pinto')
         cy.get('input[id="email"]').type('bianca.testergmail.com.br')
@@ -34,6 +38,10 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.contains('Enviar').click()
         //cy.get('button[type="submit"]').click()
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.error').should('not.be.visible')
     });
 
     it('Phone field only accepts numbers', () => {
@@ -43,6 +51,8 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     });
 
     it('Displays error message when phone becomes mandatory but not filled in before form submission', () => {
+        cy.clock()
+
         cy.get('input[name="firstName"]').type('Bianca', {delay: 25})
         cy.get('input[name="lastName"]').type('Gomes Pinto')
         cy.get('input[id="email"]').type('bianca.tester@gmail.com.br')
@@ -51,6 +61,10 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.contains('Enviar').click()
         //cy.get('button[type="submit"]').click()
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.error').should('not.be.visible')
     });
 
     it('Fill in and clean the first name, last name, email and phone fields', () => {
@@ -80,15 +94,27 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     });
 
     it('Displays error message when submitting the form without filling in the required fields', () => {
+        cy.clock()
+
         cy.contains('Enviar').click()
         //cy.get('button[type="submit"]').click()
         cy.get('.error').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.error').should('not.be.visible')
     });
 
-    it('Submit the form successfully using a custom command', () => {
+    it.only('Submit the form successfully using a custom command', () => {
+        cy.clock()
+
         cy.fillMandatoryFieldsAndSubmit()
 
         cy.get('.success').should('be.visible')
+
+        cy.tick(THREE_SECONDS_IN_MS)
+
+        cy.get('.success').should('not.be.visible')
     });
 
     it('Selects a product (YouTube) by its text', () => {
