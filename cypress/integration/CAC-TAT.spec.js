@@ -8,7 +8,9 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.title().should('be.equal', 'Central de Atendimento ao Cliente TAT')
     });
 
-    it('Fill in the required fields and send the form', () => {
+    it.only('Fill in the required fields and send the form', () => {
+        cy.clock()
+        
         cy.get('input[name="firstName"]').type('Bianca', {delay: 25})
         cy.get('input[name="lastName"]').type('Gomes Pinto')
         cy.get('input[id="email"]').type('bianca.tester@gmail.com.br')
@@ -17,6 +19,10 @@ describe('Central de Atendimento ao Cliente TAT', function() {
         cy.contains('Enviar').click()
         // cy.get('button[type="submit"]').click()
         cy.get('.success').should('be.visible')
+
+        cy.tick(3000)
+
+        cy.get('.success').should('not.be.visible')
     });
 
     it('Displays error message when submitting the form with an email with invalid formatting', () => {
