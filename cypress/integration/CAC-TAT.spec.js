@@ -45,7 +45,7 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     });
 
     Cypress._.times(3, function() {
-      it.only('Phone field only accepts numbers', () => {
+      it('Phone field only accepts numbers', () => {
         cy.get('input[id="phone"]')
         .type('abcde')
         .should('have.value', '');
@@ -198,5 +198,30 @@ describe('Central de Atendimento ao Cliente TAT', function() {
     it('Access the privacy policy page by removing the target and then clicking on the link', () => {
       cy.get('#privacy a').invoke('removeAttr', 'target').click()
       cy.contains('Talking About Testing').should('be.visible')
+    });
+
+    it('Display and hide success and error messages using .invoke', () => {
+      cy.get('.success')
+        .should('not.be.visible')
+        .invoke('show')
+        .should('be.visible')
+        .and('contain', 'Mensagem enviada com sucesso.')
+        .invoke('hide')
+        .should('not.be.visible')
+      cy.get('.error')
+        .should('not.be.visible')
+        .invoke('show')
+        .should('be.visible')
+        .and('contain', 'Valide os campos obrigatórios!')
+        .invoke('hide')
+        .should('not.be.visible')
+    })
+
+    it.only('fills the text area using the invoke command', () => {
+      const  longText = Cypress._.repeat('0123456789', 20)
+
+      cy.get('#open-text-area')
+        .invoke('val', longText)
+        .should('have.value', longText)
     });
 })
